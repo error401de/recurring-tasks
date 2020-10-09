@@ -1,1 +1,8 @@
-template of config file
+[email]
+SmtpServer = yourmailserver.com
+SmtpPort = 587
+SmtpUser = user@yourmailserver.com
+SmtpPassword = yourpassword
+SmtpSender = noreply@yourmailserver.com
+MailRecipient = recipient@yourmailserver.com
+MailPrefix = Recurring Task
