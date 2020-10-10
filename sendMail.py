@@ -16,20 +16,20 @@ def sendNotification(subject, description):
 	message = headers + body
 	context = ssl.create_default_context()
 
-	if config.get('email', 'UseStarttls') == '1':
+	if config.get('email', 'EncryptionMode') == '2':
 		with smtplib.SMTP(smtp_server, port) as server:
 			server.starttls(context=context)
 			if config.get('email', 'NoLogin') == '0':
 				server.login(user, password)
 			server.sendmail(sender, recipient, message)
 
-	if config.get('email', 'UseSsl') == '1':
+	if config.get('email', 'EncryptionMode') == '1':
 		with smtplib.SMTP_SSL(smtp_server, port) as server:
 			if config.get('email', 'NoLogin') == '0':
 				server.login(user, password)
 			server.sendmail(sender, recipient, message)
 
-	if config.get('email', 'UseStarttls') == '0' and config.get('email', 'UseSsl') == '0':
+	if config.get('email', 'EncryptionMode') == '0':
 		with smtplib.SMTP(smtp_server, port) as server:
 			server.ehlo()
 			if config.get('email', 'NoLogin') == '0':
