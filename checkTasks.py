@@ -100,8 +100,8 @@ for i in config.sections():
     if taskType == 'weekdayofmonth':
         for j in extract_weekdays(i).split(','):
             validate_weekday(j)
-            for occurrence in extract_occurrences(i).split(',').split(','):
-                validate_occurrence(occurrence):
+            for occurrence in extract_occurrences(i).split(','):
+                validate_occurrence(occurrence)
                 if daysOfTheWeek.index(j) == now.weekday():
                     message = extract_message(i)
                     if occurrence.lower() == "first" and 1 <= int(day) <= 7:
