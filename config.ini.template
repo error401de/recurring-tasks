@@ -1,8 +1,11 @@
 [email]
 SmtpServer = yourmailserver.com
 SmtpPort = 587
+;Leave SmtpUser empty, if your server does not require authentication
 SmtpUser = user@yourmailserver.com
 SmtpPassword = yourpassword
 SmtpSender = noreply@yourmailserver.com
 MailRecipient = recipient@yourmailserver.com
 MailPrefix = Recurring Task
+;EncryptionMode: 0 = No encryption, 1 = SSL, 2 = StartTLS
+EncryptionMode = 2
