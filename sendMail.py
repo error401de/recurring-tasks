@@ -1,4 +1,4 @@
-import smtplib, ssl, configparser, sys
+import smtplib, ssl, configparser
 
 def sendNotification(subject, description):
 	config = configparser.ConfigParser()
