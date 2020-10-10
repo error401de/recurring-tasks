@@ -13,21 +13,17 @@ now = datetime.now()
 day = now.strftime("%d")
 month = now.strftime("%m")
 
-
 def validate_task_type(tt):
     if tt not in taskTypeList:
         raise ValueError("Sorry, taskType should only be in {}".format(taskTypeList))
-
 
 def validate_weekday(wd):
     if wd not in daysOfTheWeek:
         raise ValueError("Sorry, Weekday should only be in {}".format(daysOfTheWeek))
 
-
 def validate_month(m):
     if m not in monthsOfTheYear:
         raise ValueError("Sorry, month should only be in  {}".format(monthsOfTheYear))
-
 
 def validate_day(d):
     try:
@@ -36,7 +32,6 @@ def validate_day(d):
         raise ValueError("day should be an int")
     if d < 1 or d > 31:
         raise ValueError("Sorry, day should only be in  [1, 31]")
-
 
 for i in config.sections():
 
