@@ -1,3 +1,4 @@
 config.ini
 app.log
 *.pyc
+backup/
