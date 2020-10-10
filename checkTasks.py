@@ -20,25 +20,27 @@ try:
     config = configparser.ConfigParser()
     config.read('tasks.ini')
 
+
     def validate_task_type(tt):
         if tt not in taskTypeList:
             errorMessage = "Sorry, taskType should only be in {}".format(taskTypeList)
-        sendMail.sendNotification("Error", errorMessage)
-        raise ValueError(errorMessage)
+            sendMail.sendNotification("Error", errorMessage)
+            raise ValueError(errorMessage)
 
 
     def validate_weekday(wd):
         if wd not in daysOfTheWeek:
             errorMessage = "Sorry, Weekday should only be in {}".format(daysOfTheWeek)
-        sendMail.sendNotification("Error", errorMessage)
-        raise ValueError(errorMessage)
+            sendMail.sendNotification("Error", errorMessage)
+            raise ValueError(errorMessage)
 
 
     def validate_month(m):
         if m not in monthsOfTheYear:
             errorMessage = "Sorry, month should only be in  {}".format(monthsOfTheYear)
-        sendMail.sendNotification("Error", errorMessage)
-        raise ValueError(errorMessage)
+            sendMail.sendNotification("Error", errorMessage)
+            raise ValueError(errorMessage)
+
 
     def validate_occurrence(o):
         if o not in occurrences:
@@ -50,7 +52,7 @@ try:
     def validate_day(d):
         try:
             d = int(d)
-        except:
+        except Exception as e:
             errorMessage = "day should be an int"
             sendMail.sendNotification("Error", errorMessage)
             raise ValueError(errorMessage)
@@ -63,20 +65,26 @@ try:
     def extract_type(section):
         return config.get(section, 'Type')
 
+
     def extract_message(section):
         return config.get(section, 'Message')
+
 
     def extract_days(section):
         return config.get(section, 'Day')
 
+
     def extract_months(section):
         return config.get(section, 'Month')
+
 
     def extract_weekdays(section):
         return config.get(section, 'Weekday')
 
+
     def extract_occurrences(section):
         return config.get(section, 'Occurrence')
+
 
     for i in config.sections():
 
@@ -114,19 +122,29 @@ try:
                         message = extract_message(i)
                         if occurrence.lower() == "first" and 1 <= int(day) <= 7:
                             sendMail.sendNotification(i, message)
-                            logging.info("Notification triggered \"{}\" every {} {} of the month ".format(message, occurrence, j))
+                            logging.info(
+                                "Notification triggered \"{}\" every {} {} of the month ".format(message, occurrence,
+                                                                                                 j))
                         elif occurrence.lower() == "second" and 8 <= int(day) <= 14:
                             sendMail.sendNotification(i, message)
-                            logging.info("Notification triggered \"{}\" every {} {} of the month ".format(message, occurrence, j))
+                            logging.info(
+                                "Notification triggered \"{}\" every {} {} of the month ".format(message, occurrence,
+                                                                                                 j))
                         elif occurrence.lower() == "third" and 15 <= int(day) <= 21:
                             sendMail.sendNotification(i, message)
-                            logging.info("Notification triggered \"{}\" every {} {} of the month ".format(message, occurrence, j))
+                            logging.info(
+                                "Notification triggered \"{}\" every {} {} of the month ".format(message, occurrence,
+                                                                                                 j))
                         elif occurrence.lower() == "fourth" and 22 <= int(day) <= 28:
                             sendMail.sendNotification(i, message)
-                            logging.info("Notification triggered \"{}\" every {} {} of the month ".format(message, occurrence, j))
+                            logging.info(
+                                "Notification triggered \"{}\" every {} {} of the month ".format(message, occurrence,
+                                                                                                 j))
                         elif occurrence.lower() == "last" and 25 <= int(day) <= 31:
                             sendMail.sendNotification(i, message)
-                            logging.info("Notification triggered \"{}\" every {} {} of the month ".format(message, occurrence, j))
+                            logging.info(
+                                "Notification triggered \"{}\" every {} {} of the month ".format(message, occurrence,
+                                                                                                 j))
                         else:
                             continue
 
@@ -142,10 +160,9 @@ try:
             if d == day and monthsOfTheYear.index(m) + 1 == int(month):
                 message = extract_message(i)
                 logging.info(
-                    "Notification triggered \"{}\" every year, the {} of the month {}".format(message, day,
-                                                                                                              month))
+                    "Notification triggered \"{}\" every year, the {} of the month {}".format(message, day, month))
                 sendMail.sendNotification(i, message)
-    
+
         if taskType == 'free':
             for j in extract_months(i).split(','):
                 validate_month(j)
@@ -155,9 +172,7 @@ try:
                         if day == k:
                             message = extract_message(i)
                             logging.info(
-                                "Notification triggered \"{}\" every {} of the months {}".format(message,
-                                                                                                                 day,
-                                                                                                                 month))
+                                "Notification triggered \"{}\" every {} of the months {}".format(message, day, month))
                             sendMail.sendNotification(i, message)
 except Exception as e:
     logger.error(e, exc_info=True)
