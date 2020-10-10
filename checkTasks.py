@@ -4,10 +4,11 @@ import logging
 
 logging.basicConfig(level='DEBUG', filename='logs/app.log', filemode='a', format='%(name)s - %(levelname)s - %(asctime)s - %(message)s')
 
-taskTypeList = ["daily", "weekly", "monthly", "yearly", "free"]
+taskTypeList = ["daily", "weekly", "monthly", "weekdayofmonth", "yearly", "free"]
 daysOfTheWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 monthsOfTheYear = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
                    "November", "December"]
+occurrences = ["first", "second", "third", "fourth", "last"]
 
 config = configparser.ConfigParser()
 config.read('tasks.ini')
@@ -30,6 +31,10 @@ def validate_weekday(wd):
 def validate_month(m):
     if m not in monthsOfTheYear:
         raise ValueError("Sorry, month should only be in  {}".format(monthsOfTheYear))
+        
+def validate_occurrence(o):
+    if o not in occurrences:
+        raise ValueError("Sorry, occurrence should only be in {}".format(occurrences))
 
 
 def validate_day(d):
@@ -59,11 +64,16 @@ def extract_months(section):
 
 def extract_weekdays(section):
     return config.get(section, 'Weekday')
+  
+
+def extract_occurrences(section):
+    return config.get(section, 'Occurrence')
 
 
 for i in config.sections():
 
     taskType = extract_type(i)
+
     validate_task_type(taskType)
 
     if taskType == 'daily':
@@ -86,6 +96,31 @@ for i in config.sections():
                 message = extract_message(i)
                 logging.info("Everything is OK! :D I'll remember you \"{}\" every {} of the month ".format(message, j))
                 sendMail.sendNotification(i, message)
+                
+    if taskType == 'weekdayofmonth':
+        for j in extract_weekdays(i).split(','):
+            validate_weekday(j)
+            for occurrence in extract_occurrences(i).split(','):
+                validate_occurrence(occurrence)
+                if daysOfTheWeek.index(j) == now.weekday():
+                    message = extract_message(i)
+                    if occurrence.lower() == "first" and 1 <= int(day) <= 7:
+                        sendMail.sendNotification(i, message)
+                        logging.info("Everything is OK! :D I'll remember you \"{}\" every {} {} of the month ".format(message, occurrence, j))
+                    elif occurrence.lower() == "second" and 8 <= int(day) <= 14:
+                        sendMail.sendNotification(i, message)
+                        logging.info("Everything is OK! :D I'll remember you \"{}\" every {} {} of the month ".format(message, occurrence, j))
+                    elif occurrence.lower() == "third" and 15 <= int(day) <= 21:
+                        sendMail.sendNotification(i, message)
+                        logging.info("Everything is OK! :D I'll remember you \"{}\" every {} {} of the month ".format(message, occurrence, j))
+                    elif occurrence.lower() == "fourth" and 22 <= int(day) <= 28:
+                        sendMail.sendNotification(i, message)
+                        logging.info("Everything is OK! :D I'll remember you \"{}\" every {} {} of the month ".format(message, occurrence, j))
+                    elif occurrence.lower() == "last" and 25 <= int(day) <= 31:
+                        sendMail.sendNotification(i, message)
+                        logging.info("Everything is OK! :D I'll remember you \"{}\" every {} {} of the month ".format(message, occurrence, j))
+                    else:
+                        continue
 
     if taskType == 'yearly':
         m = extract_months(i)
