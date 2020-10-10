@@ -17,16 +17,13 @@ now = datetime.now()
 day = now.strftime("%d")
 month = now.strftime("%m")
 
-
 def validate_task_type(tt):
     if tt not in taskTypeList:
         raise ValueError("Sorry, taskType should only be in {}".format(taskTypeList))
 
-
 def validate_weekday(wd):
     if wd not in daysOfTheWeek:
         raise ValueError("Sorry, Weekday should only be in {}".format(daysOfTheWeek))
-
 
 def validate_month(m):
     if m not in monthsOfTheYear:
@@ -36,7 +33,6 @@ def validate_occurrence(o):
     if o not in occurrences:
         raise ValueError("Sorry, occurrence should only be in {}".format(occurrences))
 
-
 def validate_day(d):
     try:
         d = int(d)
@@ -45,30 +41,23 @@ def validate_day(d):
     if d < 1 or d > 31:
         raise ValueError("Sorry, day should only be in  [1, 31]")
 
-
 def extract_type(section):
     return config.get(section, 'Type')
-
 
 def extract_message(section):
     return config.get(section, 'Message')
 
-
 def extract_days(section):
     return config.get(section, 'Day')
-
 
 def extract_months(section):
     return config.get(section, 'Month')
 
-
 def extract_weekdays(section):
     return config.get(section, 'Weekday')
   
-
 def extract_occurrences(section):
     return config.get(section, 'Occurrence')
-
 
 for i in config.sections():
 
