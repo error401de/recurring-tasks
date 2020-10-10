@@ -22,12 +22,12 @@ def validate_task_type(tt):
 
 def validate_weekday(wd):
     if wd not in daysOfTheWeek:
-        raise ValueError("Sorry, Weekday should only be in {}" .format(daysOfTheWeek))
+        raise ValueError("Sorry, Weekday should only be in {}".format(daysOfTheWeek))
 
 
 def validate_month(m):
     if m not in monthsOfTheYear:
-        raise ValueError("Sorry, month should only be in  {}",format(monthsOfTheYear))
+        raise ValueError("Sorry, month should only be in  {}".format(monthsOfTheYear))
 
 
 def validate_day(d):
@@ -86,13 +86,13 @@ for i in config.sections():
                 sendMail.sendNotification(i, message)
 
     if taskType == 'yearly':
-        month = extract_months(i)
-        day = extract_days(i)
-        if len(list(month.split(','))) > 1 or len(list(day.split(','))) > 1:
+        m = extract_months(i)
+        d = extract_days(i)
+        if len(list(m.split(','))) > 1 or len(list(d.split(','))) > 1:
             raise ValueError("Sorry, yearly task should only contain one specific date")
-        validate_day(day)
-        validate_month(month)
-        if day == day and monthsOfTheYear.index(month) + 1 == int(month):
+        validate_day(d)
+        validate_month(m)
+        if d == day and monthsOfTheYear.index(m) + 1 == int(month):
             message = extract_message(i)
             logging.info(
                 "Everything is OK! :D I'll remember you \"{}\" every year, the {} of the month {}".format(message, day,
