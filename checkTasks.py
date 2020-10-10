@@ -19,27 +19,39 @@ month = now.strftime("%m")
 
 def validate_task_type(tt):
     if tt not in taskTypeList:
-        raise ValueError("Sorry, taskType should only be in {}".format(taskTypeList))
+        errorMessage = "Sorry, taskType should only be in {}".format(taskTypeList)
+        sendMail.sendNotification("Error", errorMessage)
+        raise ValueError(errorMessage)
 
 def validate_weekday(wd):
     if wd not in daysOfTheWeek:
-        raise ValueError("Sorry, Weekday should only be in {}".format(daysOfTheWeek))
+        errorMessage = "Sorry, Weekday should only be in {}".format(daysOfTheWeek)
+        sendMail.sendNotification("Error", errorMessage)
+        raise ValueError(errorMessage)
 
 def validate_month(m):
     if m not in monthsOfTheYear:
-        raise ValueError("Sorry, month should only be in  {}".format(monthsOfTheYear))
+        errorMessage = "Sorry, month should only be in  {}".format(monthsOfTheYear)
+        sendMail.sendNotification("Error", errorMessage)
+        raise ValueError(errorMessage)
         
 def validate_occurrence(o):
     if o not in occurrences:
-        raise ValueError("Sorry, occurrence should only be in {}".format(occurrences))
+        errorMessage = "Sorry, occurrence should only be in {}".format(occurrences)
+        sendMail.sendNotification("Error", errorMessage)
+        raise ValueError(errorMessage)
 
 def validate_day(d):
     try:
         d = int(d)
     except:
-        raise ValueError("day should be an int")
+        errorMessage = "day should be an int"
+        sendMail.sendNotification("Error", errorMessage)
+        raise ValueError(errorMessage)
     if d < 1 or d > 31:
-        raise ValueError("Sorry, day should only be in  [1, 31]")
+        errorMessage = "Sorry, day should only be in  [1, 31]"
+        sendMail.sendNotification("Error", errorMessage)
+        raise ValueError(errorMessage)
 
 def extract_type(section):
     return config.get(section, 'Type')
@@ -115,7 +127,9 @@ for i in config.sections():
         m = extract_months(i)
         d = extract_days(i)
         if len(list(m.split(','))) > 1 or len(list(d.split(','))) > 1:
-            raise ValueError("Sorry, yearly task should only contain one specific date")
+            errorMessage = "Sorry, yearly task should only contain one specific date"
+            sendMail.sendNotification("Error", errorMessage)
+            raise ValueError(errorMessage)
         validate_day(d)
         validate_month(m)
         if d == day and monthsOfTheYear.index(m) + 1 == int(month):
