@@ -126,7 +126,7 @@ for i in config.sections():
     if taskType == 'yearly':
         m = extract_months(i)
         d = extract_days(i)
-        if len(list(m.split(','))) > 1 or len(list(d.split(','))) > 1:
+        if len(m.split(',')) > 1 or len(d.split(',')) > 1:
             errorMessage = "Sorry, yearly task should only contain one specific date"
             sendMail.sendNotification("Error", errorMessage)
             raise ValueError(errorMessage)
