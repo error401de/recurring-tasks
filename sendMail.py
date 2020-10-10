@@ -1,8 +1,9 @@
-import smtplib, ssl, configparser, sys
+import smtplib, ssl, configparser, sys, os
 
 def sendNotification(subject, description):
+	path = os.path.dirname(os.path.abspath(__file__))
 	config = configparser.ConfigParser()
-	config.read('config.ini')
+	config.read(path + '/config.ini')
 	smtp_server = config.get('email', 'SmtpServer')
 	port = config.get('email', 'SmtpPort')
 	user = config.get('email', 'SmtpUser')
