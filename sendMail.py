@@ -19,19 +19,19 @@ def sendNotification(subject, description):
 	if config.get('email', 'EncryptionMode') == '2':
 		with smtplib.SMTP(smtp_server, port) as server:
 			server.starttls(context=context)
-			if config.get('email', 'NoLogin') == '0':
+			if config.get('email', 'SmtpUser'):
 				server.login(user, password)
 			server.sendmail(sender, recipient, message)
 
 	if config.get('email', 'EncryptionMode') == '1':
 		with smtplib.SMTP_SSL(smtp_server, port) as server:
-			if config.get('email', 'NoLogin') == '0':
+			if config.get('email', 'SmtpUser'):
 				server.login(user, password)
 			server.sendmail(sender, recipient, message)
 
 	if config.get('email', 'EncryptionMode') == '0':
 		with smtplib.SMTP(smtp_server, port) as server:
 			server.ehlo()
-			if config.get('email', 'NoLogin') == '0':
+			if config.get('email', 'SmtpUser'):
 				server.login(user, password)
 			server.sendmail(sender, recipient, message)
