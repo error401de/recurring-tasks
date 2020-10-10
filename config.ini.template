@@ -9,3 +9,6 @@ MailRecipient = recipient@yourmailserver.com
 MailPrefix = Recurring Task
 ;EncryptionMode: 0 = No encryption, 1 = SSL, 2 = StartTLS
 EncryptionMode = 2
+
+[backup]
+Retention = 3
