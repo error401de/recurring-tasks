@@ -14,3 +14,6 @@ Example if you want to run it at 9:00 am:
 Notifications are configured in `tasks.ini`.
 
 There are different task types: daily, weekly, monthly, weekdayofmonth, yearly and free. You can find examples for all types in the file. Don't forget to uncomment the sections (remove ;)
+
+By default, this program backs up the current state of `tasks.ini` to `/backup` each time it is ran. The number of backup
+files allowed at one time can be changed in `config.ini` under section `backup` field `Retention`

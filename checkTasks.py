@@ -1,4 +1,4 @@
-import configparser, sendMail
+import configparser, sendMail, backup
 from datetime import datetime
 import logging
 
@@ -71,6 +71,7 @@ def extract_weekdays(section):
 def extract_occurrences(section):
     return config.get(section, 'Occurrence')
 
+backup.createBackup()
 for i in config.sections():
 
     taskType = extract_type(i)
