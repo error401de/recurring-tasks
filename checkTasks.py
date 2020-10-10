@@ -17,17 +17,17 @@ month = now.strftime("%m")
 
 def validate_task_type(tt):
     if tt not in taskTypeList:
-        raise ValueError("Sorry, taskType should only be in {}" % taskTypeList)
+        raise ValueError("Sorry, taskType should only be in {}".format(taskTypeList))
 
 
 def validate_weekday(wd):
     if wd not in daysOfTheWeek:
-        raise ValueError("Sorry, Weekday should only be in {}" % daysOfTheWeek)
+        raise ValueError("Sorry, Weekday should only be in {}" .format(daysOfTheWeek))
 
 
 def validate_month(m):
     if m not in monthsOfTheYear:
-        raise ValueError("Sorry, month should only be in  {}" % monthsOfTheYear)
+        raise ValueError("Sorry, month should only be in  {}",format(monthsOfTheYear))
 
 
 def validate_day(d):
@@ -88,7 +88,7 @@ for i in config.sections():
     if taskType == 'yearly':
         month = extract_months(i)
         day = extract_days(i)
-        if len(month) > 1 or len(day) > 1:
+        if len(list(month.split(','))) > 1 or len(list(day.split(','))) > 1:
             raise ValueError("Sorry, yearly task should only contain one specific date")
         validate_day(day)
         validate_month(month)
