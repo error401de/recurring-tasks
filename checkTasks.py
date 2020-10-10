@@ -2,6 +2,8 @@ import configparser, sendMail
 from datetime import datetime
 import logging
 
+logging.basicConfig(level='DEBUG', filename='logs/app.log', filemode='a', format='%(name)s - %(levelname)s - %(asctime)s - %(message)s')
+
 taskTypeList = ["daily", "weekly", "monthly", "yearly", "free"]
 daysOfTheWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 monthsOfTheYear = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
