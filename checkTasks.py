@@ -6,21 +6,19 @@ logging.config.fileConfig('logger.ini')
 logger = logging.getLogger('consoleHandler')
 
 taskTypeList = ["daily", "weekly", "monthly", "yearly", "free"]
-    daysOfTheWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-    monthsOfTheYear = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
-                       "November", "December"]
+daysOfTheWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+monthsOfTheYear = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+                   "November", "December"]
+occurrences = ["first", "second", "third", "fourth", "last"]
+
+now = datetime.now()
+day = now.strftime("%d")
+month = now.strftime("%m")
 
 try:
 
-
-
     config = configparser.ConfigParser()
     config.read('tasks.ini')
-
-    now = datetime.now()
-    day = now.strftime("%d")
-    month = now.strftime("%m")
-
 
     def validate_task_type(tt):
         if tt not in taskTypeList:
@@ -82,84 +80,84 @@ try:
 
     for i in config.sections():
 
-    taskType = extract_type(i)
+        taskType = extract_type(i)
 
-    validate_task_type(taskType)
+        validate_task_type(taskType)
 
-    if taskType == 'daily':
-        message = extract_message(i)
-        logging.info("Notification triggered \"{}\" every day ".format(message))
-        sendMail.sendNotification(i, message)
-
-    if taskType == 'weekly':
-        for j in extract_weekdays(i).split(','):
-            validate_weekday(j)
-            if daysOfTheWeek.index(j) == now.weekday():
-                message = extract_message(i)
-                logging.info("Notification triggered \"{}\" every day ".format(message))
-                sendMail.sendNotification(i, message)
-
-    if taskType == 'monthly':
-        for j in extract_days(i).split(','):
-            validate_day(j)
-            if day == j:
-                message = extract_message(i)
-                logging.info("Notification triggered \"{}\" every {} of the month ".format(message, j))
-                sendMail.sendNotification(i, message)
-
-    if taskType == 'weekdayofmonth':
-        for j in extract_weekdays(i).split(','):
-            validate_weekday(j)
-            for occurrence in extract_occurrences(i).split(','):
-                validate_occurrence(occurrence)
-                if daysOfTheWeek.index(j) == now.weekday():
-                    message = extract_message(i)
-                    if occurrence.lower() == "first" and 1 <= int(day) <= 7:
-                        sendMail.sendNotification(i, message)
-                        logging.info("Notification triggered \"{}\" every {} {} of the month ".format(message, occurrence, j))
-                    elif occurrence.lower() == "second" and 8 <= int(day) <= 14:
-                        sendMail.sendNotification(i, message)
-                        logging.info("Notification triggered \"{}\" every {} {} of the month ".format(message, occurrence, j))
-                    elif occurrence.lower() == "third" and 15 <= int(day) <= 21:
-                        sendMail.sendNotification(i, message)
-                        logging.info("Notification triggered \"{}\" every {} {} of the month ".format(message, occurrence, j))
-                    elif occurrence.lower() == "fourth" and 22 <= int(day) <= 28:
-                        sendMail.sendNotification(i, message)
-                        logging.info("Notification triggered \"{}\" every {} {} of the month ".format(message, occurrence, j))
-                    elif occurrence.lower() == "last" and 25 <= int(day) <= 31:
-                        sendMail.sendNotification(i, message)
-                        logging.info("Notification triggered \"{}\" every {} {} of the month ".format(message, occurrence, j))
-                    else:
-                        continue
-
-    if taskType == 'yearly':
-        m = extract_months(i)
-        d = extract_days(i)
-        if len(list(m.split(','))) > 1 or len(list(d.split(','))) > 1:
-            errorMessage = "Sorry, yearly task should only contain one specific date"
-            sendMail.sendNotification("Error", errorMessage)
-            raise ValueError(errorMessage)
-        validate_day(d)
-        validate_month(m)
-        if d == day and monthsOfTheYear.index(m) + 1 == int(month):
+        if taskType == 'daily':
             message = extract_message(i)
-            logging.info(
-                "Notification triggered \"{}\" every year, the {} of the month {}".format(message, day,
-                                                                                                          month))
+            logging.info("Notification triggered \"{}\" every day ".format(message))
             sendMail.sendNotification(i, message)
 
-    if taskType == 'free':
-        for j in extract_months(i).split(','):
-            validate_month(j)
-            if monthsOfTheYear.index(j) + 1 == int(month):
-                for k in extract_days(i).split(','):
-                    validate_day(k)
-                    if day == k:
+        if taskType == 'weekly':
+            for j in extract_weekdays(i).split(','):
+                validate_weekday(j)
+                if daysOfTheWeek.index(j) == now.weekday():
+                    message = extract_message(i)
+                    logging.info("Notification triggered \"{}\" every day ".format(message))
+                    sendMail.sendNotification(i, message)
+
+        if taskType == 'monthly':
+            for j in extract_days(i).split(','):
+                validate_day(j)
+                if day == j:
+                    message = extract_message(i)
+                    logging.info("Notification triggered \"{}\" every {} of the month ".format(message, j))
+                    sendMail.sendNotification(i, message)
+
+        if taskType == 'weekdayofmonth':
+            for j in extract_weekdays(i).split(','):
+                validate_weekday(j)
+                for occurrence in extract_occurrences(i).split(','):
+                    validate_occurrence(occurrence)
+                    if daysOfTheWeek.index(j) == now.weekday():
                         message = extract_message(i)
-                        logging.info(
-                            "Notification triggered \"{}\" every {} of the months {}".format(message,
-                                                                                                             day,
-                                                                                                             month))
-                        sendMail.sendNotification(i, message)
+                        if occurrence.lower() == "first" and 1 <= int(day) <= 7:
+                            sendMail.sendNotification(i, message)
+                            logging.info("Notification triggered \"{}\" every {} {} of the month ".format(message, occurrence, j))
+                        elif occurrence.lower() == "second" and 8 <= int(day) <= 14:
+                            sendMail.sendNotification(i, message)
+                            logging.info("Notification triggered \"{}\" every {} {} of the month ".format(message, occurrence, j))
+                        elif occurrence.lower() == "third" and 15 <= int(day) <= 21:
+                            sendMail.sendNotification(i, message)
+                            logging.info("Notification triggered \"{}\" every {} {} of the month ".format(message, occurrence, j))
+                        elif occurrence.lower() == "fourth" and 22 <= int(day) <= 28:
+                            sendMail.sendNotification(i, message)
+                            logging.info("Notification triggered \"{}\" every {} {} of the month ".format(message, occurrence, j))
+                        elif occurrence.lower() == "last" and 25 <= int(day) <= 31:
+                            sendMail.sendNotification(i, message)
+                            logging.info("Notification triggered \"{}\" every {} {} of the month ".format(message, occurrence, j))
+                        else:
+                            continue
+
+        if taskType == 'yearly':
+            m = extract_months(i)
+            d = extract_days(i)
+            if len(list(m.split(','))) > 1 or len(list(d.split(','))) > 1:
+                errorMessage = "Sorry, yearly task should only contain one specific date"
+                sendMail.sendNotification("Error", errorMessage)
+                raise ValueError(errorMessage)
+            validate_day(d)
+            validate_month(m)
+            if d == day and monthsOfTheYear.index(m) + 1 == int(month):
+                message = extract_message(i)
+                logging.info(
+                    "Notification triggered \"{}\" every year, the {} of the month {}".format(message, day,
+                                                                                                              month))
+                sendMail.sendNotification(i, message)
+    
+        if taskType == 'free':
+            for j in extract_months(i).split(','):
+                validate_month(j)
+                if monthsOfTheYear.index(j) + 1 == int(month):
+                    for k in extract_days(i).split(','):
+                        validate_day(k)
+                        if day == k:
+                            message = extract_message(i)
+                            logging.info(
+                                "Notification triggered \"{}\" every {} of the months {}".format(message,
+                                                                                                                 day,
+                                                                                                                 month))
+                            sendMail.sendNotification(i, message)
 except Exception as e:
     logger.error(e, exc_info=True)
