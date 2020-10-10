@@ -56,7 +56,7 @@ for i in config.sections():
     if taskType == 'yearly':
         m = config.get(i, 'Month')
         d = config.get(i, 'Day')
-        if len(list(month.split(','))) > 1 or len(list(d.split(','))) > 1:
+        if len(m.split(',')) > 1 or len(d.split(',')) > 1:
             raise ValueError("Sorry, yearly task should only contain one specific date")
         validate_day(d)
         validate_month(m)
