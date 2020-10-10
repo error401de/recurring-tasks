@@ -6,3 +6,7 @@ SmtpPassword = yourpassword
 SmtpSender = noreply@yourmailserver.com
 MailRecipient = recipient@yourmailserver.com
 MailPrefix = Recurring Task
+UseStarttls = 1
+UseSsl = 0
+;Set NoLogin to 1 if your smtp server does not require authentication
+NoLogin = 0
