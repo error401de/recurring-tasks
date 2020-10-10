@@ -1,5 +1,6 @@
 import configparser, sendMail
 from datetime import datetime
+import logging
 
 taskTypeList = ["daily", "weekly", "monthly", "yearly", "free"]
 daysOfTheWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -38,41 +39,76 @@ def validate_day(d):
         raise ValueError("Sorry, day should only be in  [1, 31]")
 
 
+def extract_type(section):
+    return config.get(section, 'Type')
+
+
+def extract_message(section):
+    return config.get(section, 'Message')
+
+
+def extract_days(section):
+    return config.get(section, 'Day')
+
+
+def extract_months(section):
+    return config.get(section, 'Month')
+
+
+def extract_weekdays(section):
+    return config.get(section, 'Weekday')
+
+
 for i in config.sections():
 
-    taskType = config.get(i, 'Type')
+    taskType = extract_type(i)
     validate_task_type(taskType)
 
     if taskType == 'daily':
-        sendMail.sendNotification(i, config.get(i, 'Message'))
+        message = extract_message(i)
+        logging.info("Everything is OK! :D I'll remember you \"{}\" every day " % message)
+        sendMail.sendNotification(i, message)
 
     if taskType == 'weekly':
-        for j in config.get(i, 'Weekday').split(','):
+        for j in extract_weekdays(i).split(','):
             validate_weekday(j)
             if daysOfTheWeek.index(j) == now.weekday():
-                sendMail.sendNotification(i, config.get(i, 'Message'))
+                message = extract_message(i)
+                logging.info("Everything is OK! :D I'll remember you \"{}\" every day ".format(message))
+                sendMail.sendNotification(i, message)
 
     if taskType == 'monthly':
-        for j in config.get(i, 'Day').split(','):
+        for j in extract_days(i).split(','):
             validate_day(j)
             if day == j:
-                sendMail.sendNotification(i, config.get(i, 'Message'))
+                message = extract_message(i)
+                logging.info("Everything is OK! :D I'll remember you \"{}\" every {} of the month ".format(message, j))
+                sendMail.sendNotification(i, message)
 
     if taskType == 'yearly':
-        month = config.get(i, 'Month')
-        day = config.get(i, 'Day')
+        month = extract_months(i)
+        day = extract_days(i)
         if len(month) > 1 or len(day) > 1:
             raise ValueError("Sorry, yearly task should only contain one specific date")
         validate_day(day)
         validate_month(month)
         if day == day and monthsOfTheYear.index(month) + 1 == int(month):
-            sendMail.sendNotification(i, config.get(i, 'Message'))
+            message = extract_message(i)
+            logging.info(
+                "Everything is OK! :D I'll remember you \"{}\" every year, the {} of the month {}".format(message, day,
+                                                                                                          month))
+            sendMail.sendNotification(i, message)
 
     if taskType == 'free':
-        for j in config.get(i, 'Month').split(','):
+        for j in extract_months(i).split(','):
             validate_month(j)
             if monthsOfTheYear.index(j) + 1 == int(month):
-                for k in config.get(i, 'Day').split(','):
+                for k in extract_days(i).split(','):
                     validate_day(k)
                     if day == k:
-                        sendMail.sendNotification(i, config.get(i, 'Message'))
+                        message = extract_message(i)
+                        logging.info(
+                            "Everything is OK! :D I'll remember you \"{}\" every {} of the months {}".format(message,
+                                                                                                             day,
+                                                                                                             month))
+                        sendMail.sendNotification(i, message)
