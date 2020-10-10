@@ -66,7 +66,7 @@ for i in config.sections():
 
     if taskType == 'daily':
         message = extract_message(i)
-        logging.info("Everything is OK! :D I'll remember you \"{}\" every day " % message)
+        logging.info("Everything is OK! :D I'll remember you \"{}\" every day ".format(message))
         sendMail.sendNotification(i, message)
 
     if taskType == 'weekly':
