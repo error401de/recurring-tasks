@@ -1,4 +1,4 @@
-import configparser, sendMail
+import configparser, sendMail, backup
 from datetime import datetime
 import logging.config
 
@@ -87,6 +87,7 @@ try:
         return config.get(section, 'Occurrence')
 
 
+    backup.createBackup()
     for i in config.sections():
 
         taskType = extract_type(i)
