@@ -5,7 +5,7 @@ import logging.config
 logging.config.fileConfig('logger.ini')
 logger = logging.getLogger('root')
 
-taskTypeList = ["daily", "weekly", "monthly", "yearly", "free"]
+taskTypeList = ["daily", "weekly", "monthly", "weekdayofmonth", "yearly", "free"]
 daysOfTheWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 monthsOfTheYear = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
                    "November", "December"]
