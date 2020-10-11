@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+
 import configparser, sendMail, backup
 from datetime import datetime
 import logging, os
