@@ -1,8 +1,11 @@
+#!/usr/bin/env python3
+
 import configparser, sendMail, backup
 from datetime import datetime
-import logging
+import logging, os
 
-logging.basicConfig(level='DEBUG', filename='logs/app.log', filemode='a', format='%(name)s - %(levelname)s - %(asctime)s - %(message)s')
+path = os.path.dirname(os.path.abspath(__file__))
+logging.basicConfig(level='DEBUG', filename=path+'/logs/app.log', filemode='a', format='%(name)s - %(levelname)s - %(asctime)s - %(message)s')
 
 taskTypeList = ["daily", "weekly", "monthly", "weekdayofmonth", "yearly", "free"]
 daysOfTheWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -11,7 +14,7 @@ monthsOfTheYear = ["January", "February", "March", "April", "May", "June", "July
 occurrences = ["first", "second", "third", "fourth", "last"]
 
 config = configparser.ConfigParser()
-config.read('tasks.ini')
+config.read(path + '/tasks.ini')
 
 now = datetime.now()
 day = now.strftime("%d")
@@ -34,7 +37,7 @@ def validate_month(m):
         errorMessage = "Sorry, month should only be in  {}".format(monthsOfTheYear)
         sendMail.sendNotification("Error", errorMessage)
         raise ValueError(errorMessage)
-        
+
 def validate_occurrence(o):
     if o not in occurrences:
         errorMessage = "Sorry, occurrence should only be in {}".format(occurrences)
