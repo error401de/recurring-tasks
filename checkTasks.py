@@ -17,7 +17,7 @@ config = configparser.ConfigParser()
 config.read(path + '/tasks.ini')
 
 now = datetime.now()
-day = now.strftime("%d")
+day = now.strftime("%e").replace(" ","")
 month = now.strftime("%m")
 
 def validate_task_type(tt):
